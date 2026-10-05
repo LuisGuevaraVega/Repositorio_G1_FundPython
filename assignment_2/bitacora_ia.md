@@ -207,22 +207,37 @@ Con esos ejemplos se escribió la explicación del paso 12 en el notebook. Adem�
 
 ---
 
-## Entrada 5 – Parte 2: API de lluvias
-
-> **PENDIENTE:** completar cuando se haga la Parte 2 (`api_lluvias.ipynb`). El enunciado exige al menos **una entrada de la Parte 2**. Debe describir un error real que haya ocurrido al trabajar con la IA en esa parte.
+## Entrada 5 – Parte 2: la comparación de `admin1` borraba el "La" de "La Libertad"
 
 ### 1. ¿Qué le pidieron a la IA?
 
-_(completar)_
+Pasos 3 y 4 de la Parte 2: geocodificar las 25 capitales con la API de Open-Meteo y revisar fila por fila que `admin1` coincidiera con el departamento, "teniendo en cuenta variantes como 'Departamento de Cusco', 'Ancash' sin tilde o 'Provincia Constitucional del Callao'". Si alguna no coincidía, la IA no debía elegir otra ciudad por su cuenta.
 
 ### 2. ¿Qué les respondió?
 
-_(completar: copiar la parte relevante del código o de la respuesta)_
+La IA escribió una función `normalizar_admin` que quita las tildes, pasa el texto a minúsculas y quita los prefijos con esta expresión regular:
+
+```python
+t = re.sub(r"^(departamento|provincia constitucional|provincia|region)\s+(del|de la|de)\s+", "", t)
+```
+
+Resultado de la primera ejecución:
+
+```text
+Capitales cuyo admin1 coincide con el departamento: 24 de 25
+```
+
+La que fallaba era La Libertad / Trujillo, con `admin1 = 'Departamento de La Libertad'`.
 
 ### 3. ¿Qué estaba mal y cómo se dieron cuenta?
 
-_(completar)_
+La tabla de verificación mostraba un `admin1` claramente correcto ("Departamento de La Libertad") con `coincide = False`. El error estaba en la expresión regular: en "Departamento de La Libertad", la variante `de la` se comía también el "La", que es parte del nombre del departamento. Quedaba "libertad" frente a "la libertad", y por eso no coincidían.
+
+Antes de tocar el código, la IA revisó a mano los 10 resultados que la API devolvió para Trujillo y confirmó que no era un problema de la API ni de los datos: el punto elegido sí estaba en La Libertad. El error estaba en la función de comparación.
 
 ### 4. ¿Cómo lo corrigieron?
 
-_(completar)_
+- Se quitó la variante `de la` de la expresión regular: quedó `(del|de)`.
+- Se volvió a ejecutar el notebook completo: **25 de 25** coinciden.
+- No se cambió ninguna ciudad.
+- Lección: antes de confiar en una función de comparación hay que probarla con los 25 nombres, sobre todo con los que empiezan con "La" (como "La Libertad").
