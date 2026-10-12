@@ -2,7 +2,7 @@
 
 Trabajo del Grupo 1 del curso Fundamentos de Python (Diplomatura QLAB – PUCP).
 
-**Dashboard público:** (`http://192.168.1.57:8501`)
+**Dashboard público:**  https://repositoriog1fundpython-fp6ocm6megy3k7eaoagk9r.streamlit.app/
 
 El dashboard muestra, para los 25 departamentos del Perú, cuánto llovió en la temporada de lluvias de 2022 y cuáles tuvieron declaratoria de emergencia por lluvias. Tiene filtros en la barra lateral (con o sin declaratoria, rango de lluvia y departamentos), cuatro métricas, un gráfico de barras, uno de dispersión, un mapa y la tabla de datos; todo cambia con los filtros.
 
